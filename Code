@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+
+using namespace std;
+struct ChessPiece {
+    char symbol;
+    string color;
+};
+
+void initializeBoard(vector<vector<ChessPiece>>& board) {
+    board[0][0] = {'R', "white"};
+    board[0][1] = {'N', "white"};
+    board[0][2] = {'B', "white"};
+    board[0][3] = {'Q', "white"};
+    board[0][4] = {'K', "white"};
+    board[0][5] = {'B', "white"};
+    board[0][6] = {'N', "white"};
+    board[0][7] = {'R', "white"};
+    for (int i = 0; i < 8; ++i) {
+        board[1][i] = {'P', "white"};
+    }
+    for (int i = 2; i < 6; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            board[i][j] = {' ', ""};
+        }
+    }
+
+    for (int i = 0; i < 8; ++i) {
+        board[6][i] = {'P', "black"};
+    }
+    board[7][0] = {'r', "black"};
+    board[7][1] = {'n', "black"};
+    board[7][2] = {'b', "black"};
+    board[7][3] = {'q', "black"};
+    board[7][4] = {'k', "black"};
+    board[7][5] = {'b', "black"};
+    board[7][6] = {'n', "black"};
+    board[7][7] = {'r', "black"};
+}
+
+void printBoard(const vector<vector<ChessPiece>>& board) {
+    cout << "  a b c d e f g h\n";
+    for (int i = 0; i < 8; ++i) {
+        cout << 8 - i << " ";
+        for (int j = 0; j < 8; ++j) {
+            cout << board[i][j].symbol << " ";
+        }
+        cout << 8 - i << "\n";
+    }
+    cout << "  a b c d e f g h\n";
+}
+
+pair<pair<int, int>, pair<int, int>> parseMove(const string& move) {
+    int srcCol = move[0] - 'a';
+    int srcRow = 8 - (move[1] - '0');
+    int destCol = move[2] - 'a';
+    int destRow = 8 - (move[3] - '0');
+    return {{srcRow, srcCol}, {destRow, destCol}};
+}
+
+int main() {
+    vector<vector<ChessPiece>> board(8, vector<ChessPiece>(8));
+    initializeBoard(board);
+
+    while (true) {
+    
+        printBoard(board);
+        string move;
+        cout << "Enter your move (e.g., e2e4): ";
+        cin >> move;
+
+        auto parsedMove = parseMove(move);
+        auto src = parsedMove.first;
+        auto dest = parsedMove.second;
+        board[dest.first][dest.second] = board[src.first][src.second];
+        board[src.first][src.second] = {' ', ""};
+    }
+
+    return 0;
+}
